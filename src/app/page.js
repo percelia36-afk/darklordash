@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { verifyPasscode } from "./actions/passcode";
 
 export default function Home() {
   const [showPasscode, setShowPasscode] = useState(true);
@@ -39,15 +40,10 @@ export default function Home() {
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-bold w-full"
               onClick={async () => {
                 setPassError("");
-                const res = await fetch("/api/passcode", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ passcode }),
-                });
-                if (res.ok) {
+                const result = await verifyPasscode(passcode);
+                if (result.success) {
                   setShowPasscode(false);
-                  if (typeof window !== "undefined")
-                    localStorage.setItem("passcode-auth", "true");
+                  localStorage.setItem("passcode-auth", "true");
                 } else {
                   setPassError("Incorrect passcode");
                 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { getImages, createImage, deleteImage } from "../actions/images";
 
 export default function ImagesPage() {
   const [url, setUrl] = useState("");
@@ -9,28 +10,24 @@ export default function ImagesPage() {
   const [images, setImages] = useState([]);
 
   async function fetchImages() {
-    const res = await fetch("/api/images");
-    const data = await res.json();
+    const data = await getImages();
     if (data.success) setImages(data.images);
   }
 
   // Fetch images on mount
   useEffect(() => {
-    async function loadImages() {
-      await fetchImages();
-    }
-    loadImages();
+    fetchImages();
   }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setMessage("");
-    const res = await fetch("/api/images", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url, description }),
-    });
-    const data = await res.json();
+
+    const formData = new FormData();
+    formData.append("url", url);
+    formData.append("description", description);
+
+    const data = await createImage(formData);
     if (data.success) {
       setMessage("Image posted successfully!");
       setUrl("");
@@ -107,11 +104,7 @@ export default function ImagesPage() {
                   </div>
                   <button
                     onClick={async () => {
-                      await fetch("/api/images", {
-                        method: "DELETE",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ id: img.id }),
-                      });
+                      await deleteImage(img.id);
                       fetchImages();
                     }}
                     className="ml-2 px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"

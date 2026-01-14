@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { getVideos, createVideo, deleteVideo } from "../actions/videos";
 
 export default function VideosPage() {
   const [url, setUrl] = useState("");
@@ -9,28 +10,24 @@ export default function VideosPage() {
   const [videos, setVideos] = useState([]);
 
   async function fetchVideos() {
-    const res = await fetch("/api/videos");
-    const data = await res.json();
+    const data = await getVideos();
     if (data.success) setVideos(data.videos);
   }
 
   // Fetch videos on mount
   useEffect(() => {
-    async function loadVideos() {
-      await fetchVideos();
-    }
-    loadVideos();
+    fetchVideos();
   }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setMessage("");
-    const res = await fetch("/api/videos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url, description }),
-    });
-    const data = await res.json();
+
+    const formData = new FormData();
+    formData.append("url", url);
+    formData.append("description", description);
+
+    const data = await createVideo(formData);
     if (data.success) {
       setMessage("Video posted successfully!");
       setUrl("");
@@ -127,11 +124,7 @@ export default function VideosPage() {
                   </div>
                   <button
                     onClick={async () => {
-                      await fetch("/api/videos", {
-                        method: "DELETE",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ id: video.id }),
-                      });
+                      await deleteVideo(video.id);
                       fetchVideos();
                     }}
                     className="ml-2 px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
