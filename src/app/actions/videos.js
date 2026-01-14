@@ -17,11 +17,13 @@ export async function getVideos() {
 export async function createVideo(formData) {
   try {
     const url = formData.get("url");
-    const description = formData.get("description");
+    const game_title = formData.get("game_title");
+    const playlist_url = formData.get("playlist_url");
+    const thumbnail_url = formData.get("thumbnail_url");
 
     const video = await queryOne(
-      "INSERT INTO videos (url, description) VALUES ($1, $2) RETURNING *",
-      [url, description]
+      "INSERT INTO videos (url, game_title, playlist_url, thumbnail_url) VALUES ($1, $2, $3, $4) RETURNING *",
+      [url, game_title, playlist_url, thumbnail_url]
     );
 
     revalidatePath("/videos");

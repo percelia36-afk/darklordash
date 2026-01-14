@@ -72,6 +72,12 @@ export default function Home() {
           >
             Go to Videos Page
           </a>
+          <a
+            href="/models"
+            className="flex h-14 items-center justify-center rounded-lg bg-purple-600 text-white text-lg font-bold transition-colors hover:bg-purple-700"
+          >
+            Go to Models Page
+          </a>
         </div>
       </main>
     </div>
