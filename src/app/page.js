@@ -60,12 +60,12 @@ export default function Home() {
           Welcome!
         </h1>
         <div className="flex flex-col gap-6 w-full max-w-xs">
-          <a
+          {/* <a
             href="/images"
             className="flex h-14 items-center justify-center rounded-lg bg-blue-600 text-white text-lg font-bold transition-colors hover:bg-blue-700"
           >
             Go to Images Page
-          </a>
+          </a> */}
           <a
             href="/videos"
             className="flex h-14 items-center justify-center rounded-lg bg-green-600 text-white text-lg font-bold transition-colors hover:bg-green-700"
