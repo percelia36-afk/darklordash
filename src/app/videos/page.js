@@ -99,33 +99,48 @@ export default function VideosPage() {
               videos.map((video) => (
                 <div
                   key={video.id}
-                  className="flex items-center gap-4 border-b pb-2"
+                  className="flex flex-col gap-2 border-b pb-4 mb-4"
                 >
-                  <div className="flex-1">
-                    <div className="font-bold text-black dark:text-zinc-50">
-                      {video.game_title}
-                    </div>
-                    <div className="text-xs text-zinc-500 dark:text-zinc-400">
-                      {new Date(video.uploaded_at).toLocaleString()}
-                    </div>
-                    <div className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
-                      Video: {video.url}
-                    </div>
-                    {video.playlist_url && (
-                      <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                        Playlist: {video.playlist_url}
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="font-bold text-black dark:text-zinc-50">
+                        {video.game_title}
                       </div>
-                    )}
+                      <div className="text-xs text-zinc-500 dark:text-zinc-400">
+                        {new Date(video.uploaded_at).toLocaleString()}
+                      </div>
+                    </div>
+                    <button
+                      onClick={async () => {
+                        await deleteVideo(video.id);
+                        fetchVideos();
+                      }}
+                      className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                    >
+                      Delete
+                    </button>
                   </div>
-                  <button
-                    onClick={async () => {
-                      await deleteVideo(video.id);
-                      fetchVideos();
-                    }}
-                    className="ml-2 px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-                  >
-                    Delete
-                  </button>
+                  <div className="w-full">
+                    <iframe
+                      src={video.url.replace("watch?v=", "embed/")}
+                      className="w-full h-64 rounded"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                  {video.playlist_url && (
+                    <div className="text-xs text-zinc-600 dark:text-zinc-400">
+                      Playlist:{" "}
+                      <a
+                        href={video.playlist_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline"
+                      >
+                        {video.playlist_url}
+                      </a>
+                    </div>
+                  )}
                 </div>
               ))
             )}
