@@ -7,16 +7,6 @@ export default function Home() {
   const [passcode, setPasscode] = useState("");
   const [passError, setPassError] = useState("");
 
-  useEffect(() => {
-    // Check if already authenticated in localStorage
-    if (
-      typeof window !== "undefined" &&
-      localStorage.getItem("passcode-auth") === "true"
-    ) {
-      setShowPasscode(false);
-    }
-  }, []);
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black relative">
       {showPasscode && (
@@ -43,7 +33,6 @@ export default function Home() {
                 const result = await verifyPasscode(passcode);
                 if (result.success) {
                   setShowPasscode(false);
-                  localStorage.setItem("passcode-auth", "true");
                 } else {
                   setPassError("Incorrect passcode");
                 }
