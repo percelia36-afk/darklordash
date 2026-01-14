@@ -7,11 +7,25 @@ export default function Home() {
   const [passcode, setPasscode] = useState("");
   const [passError, setPassError] = useState("");
 
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setPassError("");
+    const result = await verifyPasscode(passcode);
+    if (result.success) {
+      setShowPasscode(false);
+    } else {
+      setPassError("Incorrect passcode");
+    }
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black relative">
       {showPasscode && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-          <div className="bg-white dark:bg-zinc-900 p-8 rounded-lg shadow-lg flex flex-col items-center gap-4 min-w-[320px]">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white dark:bg-zinc-900 p-8 rounded-lg shadow-lg flex flex-col items-center gap-4 min-w-[320px]"
+          >
             <h2 className="text-xl font-bold text-black dark:text-zinc-50">
               Enter Passcode
             </h2>
@@ -27,20 +41,12 @@ export default function Home() {
               <div className="text-red-600 text-sm">{passError}</div>
             )}
             <button
+              type="submit"
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-bold w-full"
-              onClick={async () => {
-                setPassError("");
-                const result = await verifyPasscode(passcode);
-                if (result.success) {
-                  setShowPasscode(false);
-                } else {
-                  setPassError("Incorrect passcode");
-                }
-              }}
             >
               Enter
             </button>
-          </div>
+          </form>
         </div>
       )}
       <main

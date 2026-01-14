@@ -1,6 +1,6 @@
 "use server";
 
-const CORRECT_PASSCODE = process.env.PASSCODE || "admindb";
+const CORRECT_PASSCODE = process.env.PASSCODE;
 
 export async function verifyPasscode(passcode) {
   if (passcode === CORRECT_PASSCODE) {
