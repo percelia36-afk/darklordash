@@ -17,7 +17,11 @@ export default function VideosPage() {
 
   // Fetch videos on mount
   useEffect(() => {
-    fetchVideos();
+    async function loadVideos() {
+      const data = await getVideos();
+      if (data.success) setVideos(data.videos);
+    }
+    loadVideos();
   }, []);
 
   async function handleSubmit(e) {

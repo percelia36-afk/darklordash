@@ -16,7 +16,11 @@ export default function ModelsPage() {
 
   // Fetch models on mount
   useEffect(() => {
-    fetchModels();
+    async function loadModels() {
+      const data = await getModels();
+      if (data.success) setModels(data.models);
+    }
+    loadModels();
   }, []);
 
   async function handleSubmit(e) {

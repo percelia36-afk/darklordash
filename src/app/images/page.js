@@ -16,7 +16,11 @@ export default function ImagesPage() {
 
   // Fetch images on mount
   useEffect(() => {
-    fetchImages();
+    async function loadImages() {
+      const data = await getImages();
+      if (data.success) setImages(data.images);
+    }
+    loadImages();
   }, []);
 
   async function handleSubmit(e) {
